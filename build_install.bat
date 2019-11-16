@@ -6,11 +6,13 @@ md images
 cd images
 copy ..\..\images\*.*
 cd ..
-md songs
 cd songs
 md Article
 md Chords
 md Midi
 md MP3
 md Sheet
+cd ..
+cd ..
+
 
