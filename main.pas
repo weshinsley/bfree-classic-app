@@ -117,7 +117,7 @@ var
                    
 const SoftwareVersion : String = '2.44';
       IconOrigDim : real = 62.5;
-      v_year : String='2019';
+      v_year : String='2022';
 
 implementation
 
