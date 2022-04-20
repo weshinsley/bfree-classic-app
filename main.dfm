@@ -40,7 +40,7 @@ object FMain: TFMain
   object LVersion: TLabel
     Left = 8
     Top = 552
-    Width = 528
+    Width = 523
     Height = 18
     Caption = 
       'BFree Manual '#169' 2013 Teapot Records Media Division. Software v2.3' +

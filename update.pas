@@ -92,11 +92,14 @@ end;
 
 function TFUpdate.BetterDownloadFile(strRemoteFileName, strLocalFileName : string) : integer;
 var res : integer;
+    datequery : string;
 begin
   res:=0;
   with TDownloadURL.Create(self) do begin
     try
-      URL:=Main.updateserver+'/'+Main.updatedir+'/'+strRemoteFileName+'?d='+DateTimeToStr(now);
+      URL:=Main.updateserver+'/'+Main.updatedir+'/'+strRemoteFileName;
+      DateTimeToString(datequery, 'yymmddhhnnss', now);
+      URL:= URL + '?d='+datequery;
       FileName := strLocalFileName;
       OnDownloadProgress := URL_OnDownloadProgress;
       ExecuteTarget(nil);
@@ -231,6 +234,7 @@ begin
     LCV.font.Color:=clRed;
     LCV.update;
     LFile.Caption:='Downloading File: BFREE Software '+LNewSoftVer.Caption;
+    LFile.Update;
     while (fileexists('bfree.old')) do deletefile('bfree.old');
     while (fileexists('bfree.tmp')) do deletefile('bfree.tmp');
     betterdownloadfile('Files/'+Main.debugFile+'bfree.exe', 'bfree.tmp');
@@ -317,6 +321,7 @@ begin
             anotherNode:=newnode.AddChild('file');
             anotherNode.NodeValue:=linkFile;
             LFile.Caption:='Downloading File: '+linkFile;
+            LFile.Update;
             if ((uppercase(copy(linkFile,1,7))='HTTP://') or (uppercase(copy(linkFile,1,8))='HTTPS://')) then begin
               // Don't download - it's a link
             end else begin
@@ -332,7 +337,7 @@ begin
            // Check if song already exists
           oldid:=Node.ChildNodes['song'].ChildValues['officeno'];
           newid:=oldid;
-          if (pos(oldid,'#')>=0) then begin
+          if (pos('#', oldid) > 0) then begin
             newid:= copy(oldid,pos('#',oldid)+1,length(oldid));
             oldid:= copy(oldid,1,pos('#',oldid)-1);
             replaceID:=true;
@@ -527,7 +532,12 @@ begin
                 deletefile('Songs\'+LinkType+'\'+LinkFile);
               end else inc(j);
             end;
-            betterdownloadfile('Files/'+newFile, 'Songs/'+newtype+'/'+newfile);
+
+            if (newtype <> 'MP3') then begin
+              LFile.Caption:='Downloading File: '+newfile;
+              LFile.Update;
+              betterdownloadfile('Files/'+newFile, 'Songs/'+newtype+'/'+newfile);
+            end;
             track:=data.ChildNodes[k].ChildNodes['links'].AddChild('link');
             anothernode:=track.addChild('type');
             anothernode.nodevalue:=newtype;
@@ -542,6 +552,8 @@ begin
         end else if Node.LocalName='getfile' then begin
           newtype := Node.ChildValues['type'];
           newfile := Node.ChildValues['file'];
+          LFile.Caption:='Downloading File: '+newfile;
+          LFile.Update;
           betterdownloadfile('Files/'+newFile, 'Songs/'+newtype+'/'+newfile);
 
 /////////////////////////////////////////////////////////////////

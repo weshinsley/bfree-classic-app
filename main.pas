@@ -115,7 +115,7 @@ var
   updateserver : string;
   updatedir : string;
                    
-const SoftwareVersion : String = '2.43';
+const SoftwareVersion : String = '2.44';
       IconOrigDim : real = 62.5;
       v_year : String='2019';
 
